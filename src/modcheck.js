@@ -13,18 +13,17 @@ export default class Modcheck {
   }
 
   check() {
-    if (parseInt(this.accountNumber) === 0 || parseInt(this.sortCode) === 0) {
+    if (parseInt(this.accountNumber) === 0 || isNaN(parseInt(this.accountNumber))) {
+      return false;
+    }
+
+    const checks = this.getSortCodeChecks();
+
+    if (checks.length === 0) {
       return false;
     }
 
     let results = [];
-    const checks = this.weightTable.filter(function (check) {
-      const sortCode  = parseInt(this.sortCode);
-      const start     = parseInt(check.sortCodeRange.start);
-      const end       = parseInt(check.sortCodeRange.end);
-
-      return (sortCode >= start && sortCode <= end);
-    }, this);
 
     checks.forEach((check) => {
       this.currentCheck = check;
@@ -54,6 +53,23 @@ export default class Modcheck {
     }, true);
 
     return passed;
+  }
+
+  getSortCodeChecks() {
+    const sortCode = parseInt(this.sortCode);
+
+    if (sortCode === 0 || isNaN(sortCode)) {
+      return false;
+    }
+
+    const checks = weightTable.filter((check) => {
+      const start = parseInt(check.sortCodeRange.start);
+      const end = parseInt(check.sortCodeRange.end);
+
+      return (sortCode >= start && sortCode <= end);
+    });
+
+    return checks;
   }
 
   dblAlCheck() {
