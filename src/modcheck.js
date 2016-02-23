@@ -19,10 +19,6 @@ export default class Modcheck {
 
     const checks = this.getSortCodeChecks();
 
-    if (checks.length === 0) {
-      return false;
-    }
-
     let results = [];
 
     checks.forEach((check) => {
